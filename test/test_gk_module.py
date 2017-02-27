@@ -43,7 +43,7 @@ def test_gkmodule_init():
 
 
 def test_gkmodule_image(get_test_data_folder):
-    mym1 = GKModule("test")
+    mym1 = GKModule("Chief")
     assert mym1.set_image("not_existing_picture.png") is False
 
     img_path = os.path.join(get_test_data_folder, "person-icon.jpg")
@@ -51,13 +51,24 @@ def test_gkmodule_image(get_test_data_folder):
     assert mym1.m_shapetype == GK_SHAPE_TYPES[4]  # image
     assert mym1.m_external_link == img_path
 
-    mym2 = GKModule("My second image", img_path)
+    mym3 = GKModule("John", img_path)
+    assert mym3.m_external_link == img_path
+
+    mym2 = GKModule("Bob", img_path)
     assert mym2.m_external_link == img_path
+    mym4 = GKModule("+41791234567")
 
     # test printing with image
     dot = graphviz.Graph()
+    
     mym1.create_node(dot)
     mym2.create_node(dot)
+    mym3.create_node(dot)
+    
     dot.edge(mym1.m_name, mym2.m_name)
+    dot.edge(mym1.m_name, mym3.m_name)
+    dot.edge(mym3.m_name, mym4.m_name)
+    dot.edge(mym4.m_name, mym2.m_name)
+    
     dot.render(filename="test_img1.gv")
 
