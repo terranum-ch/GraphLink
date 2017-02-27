@@ -17,6 +17,6 @@ class GKModule(object):
         self.m_external_link = None
 
     def create_node(self, dot_obj):
-        dot_obj.node(self.m_name)
+        dot_obj.node(self.m_name, shape=self.m_shapetype)
 
 
