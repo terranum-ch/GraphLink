@@ -10,7 +10,7 @@ sys.path.append(os.path.join(curdir,".."))
 print (os.path.join(curdir, "../graphlink"))
 
 from graphlink.core.gk_node import GKNode
-from graphlink.core.gk_node import GK_SHAPE_TYPES
+from graphlink.core.gk_node import GK_SHAPE_TYPE
 
 
 @pytest.fixture()
@@ -42,8 +42,14 @@ def test_gknode_init():
     mym1 = GKNode()
     assert mym1.m_name is None
     assert mym1.m_description is None
-    assert mym1.m_shapetype == GK_SHAPE_TYPES[0]
+    assert mym1.m_shapetype == GK_SHAPE_TYPE[0]
     assert mym1.m_external_link is None
+
+    mym2 = GKNode("coucou", shape=GK_SHAPE_TYPE[2])
+    assert mym2.m_name == "coucou"
+    assert mym2.m_shapetype == GK_SHAPE_TYPE[2]
+    assert mym2.m_external_link is None
+    assert mym2.m_description is None
 
 
 def test_gknode_image(get_test_data_folder):
@@ -52,7 +58,7 @@ def test_gknode_image(get_test_data_folder):
 
     img_path = os.path.join(get_test_data_folder, "person-icon.jpg")
     assert mym1.set_image(img_path) is True
-    assert mym1.m_shapetype == GK_SHAPE_TYPES[4]  # image
+    assert mym1.m_shapetype == GK_SHAPE_TYPE[4]  # image
     assert mym1.m_external_link == img_path
 
     mym3 = GKNode("John", img_path)
@@ -76,3 +82,18 @@ def test_gknode_image(get_test_data_folder):
 
     dot.render(filename="test_img1.gv")
 
+
+def test_gknode_save():
+    testfile = "save_test_file.gkf"
+    os.remove(testfile) if os.path.exists(testfile) else None
+
+    mym1 = GKNode("John", shape=GK_SHAPE_TYPE[2])
+    assert mym1.save_to_file(testfile) is True
+
+
+def test_gknode_load():
+    mym2 = GKNode()
+    assert mym2.load_from_file("toto") is False
+    assert mym2.load_from_file("save_test_file.gkf") is True
+    assert mym2.m_name == "John"
+    assert mym2.m_shapetype == GK_SHAPE_TYPE[2]
