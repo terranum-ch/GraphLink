@@ -11,7 +11,7 @@ GK_SHAPE_TYPES = [
 ]
 
 
-class GKModule(object):
+class GKNode(object):
     def __init__(self, name=None, image=None):
         """contain module definition"""
         self.m_name = name
