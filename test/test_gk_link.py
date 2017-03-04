@@ -25,7 +25,7 @@ def test_gk_link_simple():
     myn2 = GKNode("node2")
     myn3 = GKNode("node3")
     myl1 = GKLink(myn1, myn2)
-    myl2 = GKLink(myn1, myn3)
+    myl2 = GKLink(myn1, myn3, "important", "red")
     myl3 = GKLink(myn2, myn3)
 
     # graphic part
