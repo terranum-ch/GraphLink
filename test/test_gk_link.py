@@ -6,7 +6,7 @@ import pytest
 import graphviz
 
 curdir = os.path.dirname(__file__)
-sys.path.append(os.path.join(curdir,".."))
+sys.path.append(os.path.join(curdir, ".."))
 
 from graphlink.core.gk_link import GKLink
 from graphlink.core.gk_node import GKNode

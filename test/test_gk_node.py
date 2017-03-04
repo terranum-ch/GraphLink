@@ -6,8 +6,8 @@ import pytest
 import graphviz
 
 curdir = os.path.dirname(__file__)
-sys.path.append(os.path.join(curdir,".."))
-print (os.path.join(curdir, "../graphlink"))
+sys.path.append(os.path.join(curdir, ".."))
+print(os.path.join(curdir, "../graphlink"))
 
 from graphlink.core.gk_node import GKNode
 from graphlink.core.gk_node import GK_SHAPE_TYPE
