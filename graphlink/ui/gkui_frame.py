@@ -6,6 +6,7 @@ import wx
 import wx.aui
 import wx.html
 
+from .gkui_node_dlg import GKUINodeEditDialog
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -89,7 +90,7 @@ class GKUIFrame (wx.Frame):
         self.Centre(wx.BOTH)
 
         # Connect Events
-        self.Bind(wx.EVT_MENU, self.OnNodeImport, id = self.m_menu_node_path.GetId())
+        self.Bind(wx.EVT_MENU, self.OnNodeSetPath, id = self.m_menu_node_path.GetId())
         self.Bind(wx.EVT_MENU, self.OnNodeAdd, id = self.m_menu_node_add.GetId())
 
     def _create_menubar(self):
@@ -100,25 +101,25 @@ class GKUIFrame (wx.Frame):
         self.m_menu_node_path = wx.MenuItem(
             self.m_menu_nodes, wx.ID_ANY,
             u"Set path...", wx.EmptyString, wx.ITEM_NORMAL)
-        self.m_menu_nodes.AppendItem(self.m_menu_node_path)
+        self.m_menu_nodes.Append(self.m_menu_node_path)
         self.m_menu_nodes.AppendSeparator()
         self.m_menu_node_add = wx.MenuItem(
             self.m_menu_nodes, wx.ID_ANY,
             u"Add...", wx.EmptyString, wx.ITEM_NORMAL)
-        self.m_menu_nodes.AppendItem(self.m_menu_node_add)
+        self.m_menu_nodes.Append(self.m_menu_node_add)
         self.m_menu_node_edit = wx.MenuItem(
             self.m_menu_nodes, wx.ID_ANY,
             u"Edit...", wx.EmptyString, wx.ITEM_NORMAL)
-        self.m_menu_nodes.AppendItem(self.m_menu_node_edit)
+        self.m_menu_nodes.Append(self.m_menu_node_edit)
         self.m_menu_node_remove = wx.MenuItem(
             self.m_menu_nodes, wx.ID_ANY,
             u"Remove", wx.EmptyString, wx.ITEM_NORMAL)
-        self.m_menu_nodes.AppendItem(self.m_menu_node_remove)
+        self.m_menu_nodes.Append(self.m_menu_node_remove)
         self.m_menu_nodes.AppendSeparator()
         self.m_menu_node_reload = wx.MenuItem(
             self.m_menu_nodes, wx.ID_ANY,
             u"Reload", wx.EmptyString, wx.ITEM_NORMAL)
-        self.m_menu_nodes.AppendItem(self.m_menu_node_reload)
+        self.m_menu_nodes.Append(self.m_menu_node_reload)
         self.m_menubar.Append(self.m_menu_nodes, u"Nodes")
 
         self.SetMenuBar(self.m_menubar)
@@ -146,13 +147,14 @@ class GKUIFrame (wx.Frame):
     def __del__(self):
         self.m_mgr.UnInit()
 
-    def OnNodeImport(self, event):
+    def OnNodeSetPath(self, event):
         wx.LogMessage("Node import")
         event.Skip()
     
     def OnNodeAdd(self, event):
-        wx.LogMessage("Node Adding")
-        event.Skip()
+        myDlg = GKUINodeEditDialog(self)
+        myDlg.ShowModal()
+        # event.Skip()
 
 
 
