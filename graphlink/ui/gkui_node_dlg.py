@@ -5,7 +5,7 @@ from ..core.gk_node import GKNode, GK_SHAPE_TYPE
 
 
 class GKUINodeEditDialog ( wx.Dialog ):   
-    def __init__( self, parent, node=None ):
+    def __init__( self, parent, node):
         wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Edit Node", pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
         
         self.m_node = node
@@ -77,13 +77,23 @@ class GKUINodeEditDialog ( wx.Dialog ):
         pass
     
     def OnUpdateUIImage( self, event ):
+        """Update the UI for the image browse control"""
         index = GK_SHAPE_TYPE.index("image")
         if self.m_style_ctrl.GetSelection() == GK_SHAPE_TYPE.index("image"):
             event.Enable(True)
         else:
             event.Enable(False)
-        # event.Skip()
     
+    def TransferDataToWindow(self):
+        if self.m_node.m_name:
+            self.m_label_ctrl.SetValue(self.m_node.m_name)
+        if self.m_node.m_description:
+            self.m_desc_ctrl.SetValue(self.m_node.m_description)
+        self.m_style_ctrl.SetSelection(GK_SHAPE_TYPE.index(self.m_node.m_shapetype))
+        if self.m_node.m_external_link:
+            self.m_img_ctrl.SetPath(self.m_node.m_external_link)
+        return True
+
     def OnSave( self, event ):
         event.Skip()
     

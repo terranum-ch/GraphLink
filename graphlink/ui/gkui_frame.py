@@ -7,6 +7,8 @@ import wx.aui
 import wx.html
 
 from .gkui_node_dlg import GKUINodeEditDialog
+from ..core.gk_node import GKNode
+
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -131,7 +133,7 @@ class GKUIFrame (wx.Frame):
             style = wx.TB_DEFAULT_STYLE
 
         self.m_toolBar = self.CreateToolBar(style)
-        self.m_toolBar.SetToolBitmapSize(wx.Size(32,32) )
+        self.m_toolBar.SetToolBitmapSize(wx.Size(32, 32))
         self.m_tool_node_import = self.m_toolBar.AddTool(
             self.m_menu_node_path.GetId(),
             u"Import nodes",
@@ -143,18 +145,17 @@ class GKUIFrame (wx.Frame):
             None) 
         self.m_toolBar.Realize()
 
-    
     def __del__(self):
         self.m_mgr.UnInit()
 
     def OnNodeSetPath(self, event):
         wx.LogMessage("Node import")
         event.Skip()
-    
+
     def OnNodeAdd(self, event):
-        myDlg = GKUINodeEditDialog(self)
+        mynode = GKNode()
+        myDlg = GKUINodeEditDialog(self, mynode)
         myDlg.ShowModal()
-        # event.Skip()
 
 
 
