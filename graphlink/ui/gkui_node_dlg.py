@@ -95,5 +95,10 @@ class GKUINodeEditDialog ( wx.Dialog ):
         return True
 
     def OnSave( self, event ):
+        self.m_node.m_name = self.m_label_ctrl.GetValue()
+        self.m_node.m_description = self.m_desc_ctrl.GetValue()
+        self.m_node.m_shapetype = GK_SHAPE_TYPE[self.m_style_ctrl.GetSelection()]
+        self.m_node.m_external_link = self.m_img_ctrl.GetPath()
+        self.Close()
         event.Skip()
     

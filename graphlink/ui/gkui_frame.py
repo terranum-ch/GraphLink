@@ -156,6 +156,7 @@ class GKUIFrame (wx.Frame):
         mynode = GKNode()
         myDlg = GKUINodeEditDialog(self, mynode)
         myDlg.ShowModal()
+        print(mynode.m_name)
 
 
 
