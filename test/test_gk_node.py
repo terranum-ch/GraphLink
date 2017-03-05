@@ -84,7 +84,7 @@ def test_gknode_image(get_test_data_folder):
 
 
 def test_gknode_save():
-    testfile = "save_test_file.gkf"
+    testfile = "save_test_file.gkn"
     os.remove(testfile) if os.path.exists(testfile) else None
 
     mym1 = GKNode("John", shape=GK_SHAPE_TYPE[2])
@@ -94,6 +94,6 @@ def test_gknode_save():
 def test_gknode_load():
     mym2 = GKNode()
     assert mym2.load_from_file("toto") is False
-    assert mym2.load_from_file("save_test_file.gkf") is True
+    assert mym2.load_from_file("save_test_file.gkn") is True
     assert mym2.m_name == "John"
     assert mym2.m_shapetype == GK_SHAPE_TYPE[2]
