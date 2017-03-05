@@ -1,9 +1,16 @@
 #!/urs/bin/python
 import os
+import sys
 import platform
 import wx
 import wx.aui
 import wx.html
+
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, "art",  relative_path)
+    return os.path.join(os.path.dirname(__file__), "..", "art", relative_path)
 
 # from ..core.gk_node import GKNode (this code works for importing)
 
@@ -95,9 +102,6 @@ class GKUIFrame (wx.Frame):
         self.Bind( wx.EVT_MENU, self.OnNodeAdd, id = self.m_menu_node_add.GetId() )
 
     def _create_toolbar(self,):
-        # art path
-        art_path = os.path.join(os.path.dirname(__file__), "..", "art")
-        
        # no text for windows 
         style = wx.TB_DEFAULT_STYLE | wx.TB_TEXT
         if "Windows" in platform.system(): 
@@ -108,7 +112,7 @@ class GKUIFrame (wx.Frame):
         self.m_tool_node_import = self.m_toolBar.AddTool(
             wx.ID_ANY,
             u"Import nodes",
-            wx.Bitmap(os.path.join(art_path, "node_import.png")),
+            wx.Bitmap(resource_path("node_import.png")),
             wx.NullBitmap,
             wx.ITEM_NORMAL,
             u"Import nodes",
