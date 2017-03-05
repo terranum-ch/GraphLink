@@ -21,4 +21,23 @@ Install the required dependencies with pip
     pip install -U --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython_Phoenix
 
 
+## Test
+
+Run the test with `pytest` in the root directory
+
+## Binary
+
+Run the following command :
+
+    pyinstaller --onefile --windowed --name=GraphLink --icon=resources/art/graphlink.icns main.py
+
+edit the `GraphLink.spec` file and add the following in the data line : 
+
+    datas=[('../trunk/graphlink/art/*.png', 'art')],
+
+run :
+
+     pyinstaller GraphLink.spec
+
+
 
