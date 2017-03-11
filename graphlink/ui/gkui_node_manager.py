@@ -3,12 +3,14 @@ import os
 import wx
 
 from ..core.gk_node import GKNode
+from .gkui_node_dlg import GKUINodeEditDialog
 
 
 class GKUINodeManager(object):
-    def __init__(self, listctrl):
+    def __init__(self, parentframe, listctrl):
         self.m_listctrl = listctrl
         assert (self.m_listctrl is not None), "listctrl is None!"
+        self.m_parent_frame = parentframe
         self.m_nodes = []
         self.m_node_paths = []
 
@@ -28,7 +30,7 @@ class GKUINodeManager(object):
         if node not in self.m_nodes:
             self.m_nodes.append(node)
 
-    def reload(self):
+    def reload_path(self):
         """clear the list ctrl and parse the node paths"""
         for path in self.m_node_paths:
             if os.path.exists(path) is False:
@@ -42,9 +44,20 @@ class GKUINodeManager(object):
                         else:
                             self.add_node_to_list(node)
 
-        # reload the list here
+                # reload the node list
+                self.reload_list()
+
+    def reload_list(self):
+        """reload the node list"""
         self.m_listctrl.DeleteAllItems()
         for index, node in enumerate(self.m_nodes):
             self.m_listctrl.InsertStringItem(index, node.m_name)
+
+    def add_node_dialog(self):
+        mynode = GKNode()
+        myDlg = GKUINodeEditDialog(self.m_parent_frame, mynode)
+        if myDlg.ShowModal() == wx.ID_SAVE:
+            self.add_node_to_list(mynode)
+            self.reload_list()
 
 
