@@ -35,22 +35,28 @@ class GKUIGraphicManager(object):
         for index, link in enumerate(self.m_links):
             self.m_link_list.Append([link.m_node1.m_name, link.m_node2.m_name])
 
-    def generate_graph(self):
-        """create the graphic"""
+    def generate_graph_display(self):
+        """create the graphic for the display"""
         graph = GKGraphic()
         for link in self.m_links:
             graph.add_link(link)
 
         my_temp_name = tempfile.mkstemp('.png', 'graphiclink')[1]
-        graph.render(my_temp_name)
-        print("creating the graphic:", my_temp_name)
 
-    def reload_display(self):
+        graph.render(
+            os.path.splitext(my_temp_name)[0],
+            extension="png",
+            size=self.m_display.GetSize()[0])
+        return my_temp_name
+        # TODO: Store the generated file and try to destroy it
+        # when a new graph is created
+
+    def reload_display(self, imgpath):
         self.m_display.SetPage("""
         <html>
         <body>
-        <img src="/Users/lucien/DATA/PRJ/GRAPHLINK/trunk/test_graphic_result.png"/>
+        <img src="{}"/>
         </body>
         </html>
-        """)
+        """.format(imgpath))
 

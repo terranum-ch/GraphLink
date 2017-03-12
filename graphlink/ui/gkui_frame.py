@@ -233,5 +233,5 @@ class GKUIFrame (wx.Frame):
         self.m_graphic_manager.add_link_dialog()
 
     def OnGraphGenerate(self, event):
-        self.m_graphic_manager.reload_display()
-        # self.m_graphic_manager.generate_graph()
+        my_filename = self.m_graphic_manager.generate_graph_display()
+        self.m_graphic_manager.reload_display(my_filename)
