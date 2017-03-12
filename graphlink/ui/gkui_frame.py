@@ -92,9 +92,17 @@ class GKUIFrame (wx.Frame):
         self.m_node_manager = GKUINodeManager(self, self.m_list_node_ctrl)
 
         # Connect Events
+        # Menu event
         self.Bind(wx.EVT_MENU, self.OnNodeSetPath, id=self.m_menu_node_path.GetId())
         self.Bind(wx.EVT_MENU, self.OnNodeAdd, id=self.m_menu_node_add.GetId())
+        self.Bind(wx.EVT_MENU, self.OnNodeEdit, id=self.m_menu_node_edit.GetId())
+        
+        # node list event
+        self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnNodeEdit, id=self.m_list_node_ctrl.GetId())
 
+        # ui event
+        self.Bind(wx.EVT_UPDATE_UI, self.OnNoNodeSelected, id=self.m_menu_node_edit.GetId())
+    
     def _create_menubar(self):
         self.m_menubar = wx.MenuBar(0)
 
@@ -154,10 +162,12 @@ class GKUIFrame (wx.Frame):
 
     def OnNodeAdd(self, event):
         self.m_node_manager.add_node_dialog()
-        # mynode = GKNode()
-        # myDlg = GKUINodeEditDialog(self, mynode)
-        # myDlg.ShowModal()
-        # print(mynode.m_name)
 
+    def OnNodeEdit(self, event):
+        self.m_node_manager.edit_node_dialog()
 
-
+    def OnNoNodeSelected(self, event):
+        if self.m_list_node_ctrl.GetFirstSelected() == -1:  # no selection
+            event.Enable(False)
+        else:
+            event.Enable(True)
