@@ -53,7 +53,6 @@ class GKUIFrame (wx.Frame):
 
         bSizer2.Add(self.m_list_node_ctrl, 1, wx.EXPAND, 5)
 
-
         self.m_panel_node.SetSizer(bSizer2)
         self.m_panel_node.Layout()
         bSizer2.Fit(self.m_panel_node)
@@ -64,7 +63,6 @@ class GKUIFrame (wx.Frame):
 
         self.m_htmlWin1 = wx.html.HtmlWindow(self.m_panel_main, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO)
         bSizer3.Add(self.m_htmlWin1, 1, wx.EXPAND, 5)
-
 
         self.m_panel_main.SetSizer(bSizer3)
         self.m_panel_main.Layout()
@@ -77,17 +75,21 @@ class GKUIFrame (wx.Frame):
         self.m_search_link_ctrl = wx.SearchCtrl(self.m_panel_link, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
         self.m_search_link_ctrl.ShowSearchButton(True)
         self.m_search_link_ctrl.ShowCancelButton(True)
-        bSizer4.Add(self.m_search_link_ctrl, 0, wx.ALL|wx.EXPAND, 5)
+        bSizer4.Add(self.m_search_link_ctrl, 0, wx.ALL | wx.EXPAND, 5)
 
-        self.m_list_link_ctrl = wx.ListCtrl(self.m_panel_link, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_LIST)
+        self.m_list_link_ctrl = wx.ListCtrl(
+            self.m_panel_link, wx.ID_ANY, wx.DefaultPosition,
+            wx.DefaultSize, wx.LC_REPORT)
+        self.m_list_link_ctrl.InsertColumn(0, "From", width=100)
+        self.m_list_link_ctrl.InsertColumn(1, "To", width=100)
+
         bSizer4.Add(self.m_list_link_ctrl, 1, wx.EXPAND, 5)
-
 
         self.m_panel_link.SetSizer(bSizer4)
         self.m_panel_link.Layout()
         bSizer4.Fit(self.m_panel_link)
 
-        # create the menubar / toolbar / statusbar 
+        # create the menubar / toolbar / statusbar
         self._create_menubar()
         self._create_toolbar()
         self.m_statusBar = self.CreateStatusBar(1, wx.STB_SIZEGRIP, wx.ID_ANY)
@@ -165,13 +167,13 @@ class GKUIFrame (wx.Frame):
         self.m_menu_links.Append(self.m_menu_link_remove)
 
         self.m_menubar.Append(self.m_menu_links, u"Links") 
-        
+
         self.SetMenuBar(self.m_menubar)
 
     def _create_toolbar(self,):
-       # no text for windows 
+        # no text for windows
         style = wx.TB_DEFAULT_STYLE | wx.TB_TEXT
-        if "Windows" in platform.system(): 
+        if "Windows" in platform.system():
             style = wx.TB_DEFAULT_STYLE
 
         self.m_toolBar = self.CreateToolBar(style)
