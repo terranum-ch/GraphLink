@@ -46,5 +46,11 @@ class GKUIGraphicManager(object):
         print("creating the graphic:", my_temp_name)
 
     def reload_display(self):
-        self.m_display.LoadFile("/Users/lucien/Downloads/test_graphiclink.gv.pdf")
+        self.m_display.SetPage("""
+        <html>
+        <body>
+        <img src="/Users/lucien/DATA/PRJ/GRAPHLINK/trunk/test_graphic_result.png"/>
+        </body>
+        </html>
+        """)
 

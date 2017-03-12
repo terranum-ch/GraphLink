@@ -61,8 +61,15 @@ class GKUIFrame (wx.Frame):
 
         bSizer3 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_htmlWin1 = wx.html.HtmlWindow(self.m_panel_main, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO)
-        bSizer3.Add(self.m_htmlWin1, 1, wx.EXPAND, 5)
+        self.m_html_win = wx.html.HtmlWindow(self.m_panel_main, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO)
+        bSizer3.Add(self.m_html_win, 1, wx.EXPAND, 5)
+        #self.m_html_win = pdfViewer(
+        #    self.m_panel_main, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
+        #    wx.HSCROLL | wx.VSCROLL)
+        #self.m_html_win.UsePrintDirect = False
+        # self.m_SetSizerProps(expand=True, proportion=1)
+
+        #wx.html.HtmlWindow(self.m_panel_main, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.html.HW_SCROLLBAR_AUTO)
 
         self.m_panel_main.SetSizer(bSizer3)
         self.m_panel_main.Layout()
@@ -101,8 +108,7 @@ class GKUIFrame (wx.Frame):
         self.m_node_manager = GKUINodeManager(self, self.m_list_node_ctrl)
         self.m_graphic_manager = GKUIGraphicManager(
             parentframe=self, linklist=self.m_list_link_ctrl,
-            graphicview=self.m_htmlWin1, nodemanager=self.m_node_manager)
-
+            display=self.m_html_win, nodemanager=self.m_node_manager)
 
         # Connect Events
         # Menu event
@@ -110,8 +116,9 @@ class GKUIFrame (wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnNodeAdd, id=self.m_menu_node_add.GetId())
         self.Bind(wx.EVT_MENU, self.OnNodeEdit, id=self.m_menu_node_edit.GetId())
         self.Bind(wx.EVT_MENU, self.OnLinkAdd, id=self.m_menu_link_add.GetId())
+        self.Bind(wx.EVT_MENU, self.OnGraphGenerate, id=self.m_menu_graph_generate.GetId())
         self.Bind(wx.EVT_CLOSE, self.Close, id=self.GetId())
-        
+
         # node list event
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnNodeEdit, id=self.m_list_node_ctrl.GetId())
 
@@ -119,7 +126,6 @@ class GKUIFrame (wx.Frame):
         self.Bind(wx.EVT_UPDATE_UI, self.OnNoNodeSelected, id=self.m_menu_node_edit.GetId())
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateStatusBar, id=self.m_statusBar.GetId())
 
-    
     def _create_menubar(self):
         self.m_menubar = wx.MenuBar(0)
 
@@ -166,7 +172,16 @@ class GKUIFrame (wx.Frame):
             u"Remove", wx.EmptyString, wx.ITEM_NORMAL)
         self.m_menu_links.Append(self.m_menu_link_remove)
 
-        self.m_menubar.Append(self.m_menu_links, u"Links") 
+        self.m_menubar.Append(self.m_menu_links, u"Links")
+
+        # graphic menu
+        self.m_menu_graph = wx.Menu()
+        self.m_menu_graph_generate = wx.MenuItem(
+            self.m_menu_graph, wx.ID_ANY, u"Generate",
+            wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_graph.Append(self.m_menu_graph_generate)
+
+        self.m_menubar.Append(self.m_menu_graph, u"Graphic")
 
         self.SetMenuBar(self.m_menubar)
 
@@ -186,7 +201,7 @@ class GKUIFrame (wx.Frame):
             wx.ITEM_NORMAL,
             u"Import nodes",
             wx.EmptyString,
-            None) 
+            None)
         self.m_toolBar.Realize()
 
     def Close(self, force=False):
@@ -216,3 +231,7 @@ class GKUIFrame (wx.Frame):
 
     def OnLinkAdd(self, event):
         self.m_graphic_manager.add_link_dialog()
+
+    def OnGraphGenerate(self, event):
+        self.m_graphic_manager.reload_display()
+        # self.m_graphic_manager.generate_graph()
