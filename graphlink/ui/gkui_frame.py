@@ -43,7 +43,13 @@ class GKUIFrame (wx.Frame):
         self.m_search_node_ctrl.ShowCancelButton(True)
         bSizer2.Add(self.m_search_node_ctrl, 0, wx.ALL|wx.EXPAND, 5)
 
-        self.m_list_node_ctrl = wx.ListCtrl(self.m_panel_node, wx.ID_ANY, wx.DefaultPosition, wx.Size(250,-1), wx.LC_LIST)
+
+        self.m_list_node_ctrl = wx.ListView(
+            self.m_panel_node, wx.ID_ANY, wx.DefaultPosition,
+            wx.Size(250, -1), wx.LC_REPORT)
+        self.m_list_node_ctrl.InsertColumn(0, "No.", width=50)
+        self.m_list_node_ctrl.InsertColumn(1, "Name", width=150)
+
         bSizer2.Add(self.m_list_node_ctrl, 1, wx.EXPAND, 5)
 
 
@@ -102,6 +108,8 @@ class GKUIFrame (wx.Frame):
 
         # ui event
         self.Bind(wx.EVT_UPDATE_UI, self.OnNoNodeSelected, id=self.m_menu_node_edit.GetId())
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateStatusBar, id=self.m_statusBar.GetId())
+
     
     def _create_menubar(self):
         self.m_menubar = wx.MenuBar(0)
@@ -171,3 +179,7 @@ class GKUIFrame (wx.Frame):
             event.Enable(False)
         else:
             event.Enable(True)
+
+    def OnUpdateStatusBar(self, event):
+        self.m_statusBar.SetStatusText(
+            "Nodes: {}".format(self.m_node_manager.get_node_count()))

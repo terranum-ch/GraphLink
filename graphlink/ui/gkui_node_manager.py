@@ -30,6 +30,10 @@ class GKUINodeManager(object):
         if node not in self.m_nodes:
             self.m_nodes.append(node)
 
+    def get_node_count(self):
+        """get the number of nodes"""
+        return len(self.m_nodes)
+
     def reload_path(self):
         """clear the list ctrl and parse the node paths"""
         for path in self.m_node_paths:
@@ -51,7 +55,7 @@ class GKUINodeManager(object):
         """reload the node list"""
         self.m_listctrl.DeleteAllItems()
         for index, node in enumerate(self.m_nodes):
-            self.m_listctrl.Append([node.m_name])
+            self.m_listctrl.Append([index + 1, node.m_name])
 
     def add_node_dialog(self):
         """display the add node dialog"""
