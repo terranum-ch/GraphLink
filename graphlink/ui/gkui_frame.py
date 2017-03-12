@@ -7,6 +7,7 @@ import wx.aui
 import wx.html
 
 from .gkui_node_manager import GKUINodeManager
+from .gkui_graphic_manager import GKUIGraphicManager
 
 
 def resource_path(relative_path):
@@ -34,7 +35,7 @@ class GKUIFrame (wx.Frame):
         self.m_mgr.SetFlags(wx.aui.AUI_MGR_DEFAULT)
 
         self.m_panel_node = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-        self.m_mgr.AddPane(self.m_panel_node, wx.aui.AuiPaneInfo() .Left() .Caption(u"Nodes").CloseButton(False).Dock().Resizable().FloatingSize(wx.Size(200,36) ).Row(1).MinSize(wx.Size(200,200) ).Layer(0) )
+        self.m_mgr.AddPane(self.m_panel_node, wx.aui.AuiPaneInfo() .Left() .Caption(u"Nodes").CloseButton(False).Dock().Resizable().FloatingSize(wx.Size(200,36)).Row(1).MinSize(wx.Size(200,200)).Layer(0))
 
         bSizer2 = wx.BoxSizer(wx.VERTICAL)
 
@@ -69,7 +70,7 @@ class GKUIFrame (wx.Frame):
         self.m_panel_main.Layout()
         bSizer3.Fit(self.m_panel_main)
         self.m_panel_link = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
-        self.m_mgr.AddPane(self.m_panel_link, wx.aui.AuiPaneInfo() .Right() .Caption(u"Links").CloseButton(False).Dock().Resizable().FloatingSize(wx.Size(400,250) ).Row(1).Position(1).MinSize(wx.Size(200,250) ))
+        self.m_mgr.AddPane(self.m_panel_link, wx.aui.AuiPaneInfo() .Right() .Caption(u"Links").CloseButton(False).Dock().Resizable().FloatingSize(wx.Size(400,250)).Row(1).Position(1).MinSize(wx.Size(200,250)))
 
         bSizer4 = wx.BoxSizer(wx.VERTICAL)
 
@@ -78,8 +79,8 @@ class GKUIFrame (wx.Frame):
         self.m_search_link_ctrl.ShowCancelButton(True)
         bSizer4.Add(self.m_search_link_ctrl, 0, wx.ALL|wx.EXPAND, 5)
 
-        self.m_listCtrl2 = wx.ListCtrl(self.m_panel_link, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_LIST)
-        bSizer4.Add(self.m_listCtrl2, 1, wx.EXPAND, 5)
+        self.m_list_link_ctrl = wx.ListCtrl(self.m_panel_link, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_LIST)
+        bSizer4.Add(self.m_list_link_ctrl, 1, wx.EXPAND, 5)
 
 
         self.m_panel_link.SetSizer(bSizer4)
@@ -94,14 +95,20 @@ class GKUIFrame (wx.Frame):
         self.m_mgr.Update()
         self.Centre(wx.BOTH)
 
-        # Node Manager
+        # Init Managers
         self.m_node_manager = GKUINodeManager(self, self.m_list_node_ctrl)
+        self.m_graphic_manager = GKUIGraphicManager(
+            parentframe=self, linklist=self.m_list_link_ctrl,
+            graphicview=self.m_htmlWin1, nodemanager=self.m_node_manager)
+
 
         # Connect Events
         # Menu event
         self.Bind(wx.EVT_MENU, self.OnNodeSetPath, id=self.m_menu_node_path.GetId())
         self.Bind(wx.EVT_MENU, self.OnNodeAdd, id=self.m_menu_node_add.GetId())
         self.Bind(wx.EVT_MENU, self.OnNodeEdit, id=self.m_menu_node_edit.GetId())
+        self.Bind(wx.EVT_MENU, self.OnLinkAdd, id=self.m_menu_link_add.GetId())
+        self.Bind(wx.EVT_CLOSE, self.Close, id=self.GetId())
         
         # node list event
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnNodeEdit, id=self.m_list_node_ctrl.GetId())
@@ -140,6 +147,25 @@ class GKUIFrame (wx.Frame):
         self.m_menu_nodes.Append(self.m_menu_node_reload)
         self.m_menubar.Append(self.m_menu_nodes, u"Nodes")
 
+        # links menu
+        self.m_menu_links = wx.Menu()
+        self.m_menu_link_add = wx.MenuItem(
+            self.m_menu_links, wx.ID_ANY,
+            u"Add...", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_links.Append(self.m_menu_link_add)
+
+        self.m_menu_link_edit = wx.MenuItem(
+            self.m_menu_links, wx.ID_ANY,
+            u"Edit...", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_links.Append(self.m_menu_link_edit)
+
+        self.m_menu_link_remove = wx.MenuItem(
+            self.m_menu_links, wx.ID_ANY,
+            u"Remove", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_links.Append(self.m_menu_link_remove)
+
+        self.m_menubar.Append(self.m_menu_links, u"Links") 
+        
         self.SetMenuBar(self.m_menubar)
 
     def _create_toolbar(self,):
@@ -161,8 +187,10 @@ class GKUIFrame (wx.Frame):
             None) 
         self.m_toolBar.Realize()
 
-    def __del__(self):
+    def Close(self, force=False):
+        """uninit the aui manager"""
         self.m_mgr.UnInit()
+        self.Destroy()
 
     def OnNodeSetPath(self, event):
         wx.LogMessage("Node import")
@@ -183,3 +211,6 @@ class GKUIFrame (wx.Frame):
     def OnUpdateStatusBar(self, event):
         self.m_statusBar.SetStatusText(
             "Nodes: {}".format(self.m_node_manager.get_node_count()))
+
+    def OnLinkAdd(self, event):
+        self.m_graphic_manager.add_link_dialog()
