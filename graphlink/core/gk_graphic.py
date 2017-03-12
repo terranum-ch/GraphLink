@@ -5,7 +5,6 @@ import graphviz
 # from gk_node import GKNode
 # from gk_link import GKLink
 
-
 class GKGraphic(object):
     """Manage graphic"""
     def __init__(self, label=None):
@@ -25,12 +24,17 @@ class GKGraphic(object):
             self.m_nodes_list.append(link.m_node2)
         return True
 
-    def render(self, filename):
+    def render(self, filename, extension="pdf", size=None):
         """generate the graphic and save result as an image"""
         if filename is None:
             return False
 
-        dot = graphviz.Graph(comment=self.m_label)
+        if size:
+            size_str = str(size / 100.0) + "!"
+            dot = graphviz.Graph(comment=self.m_label, format=extension, graph_attr={"size": size_str})
+        else:
+            dot = graphviz.Graph(comment=self.m_label, format=extension)
+
         # create the nodes for the nodes_list items
         for node in self.m_nodes_list:
             node.create_node(dot)

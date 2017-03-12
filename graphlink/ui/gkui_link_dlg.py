@@ -106,5 +106,5 @@ class GKUILinkDialog (wx.Dialog):
         self.m_link.m_node1 = my_node1
         self.m_link.m_node2 = my_node2
         self.m_link.m_label = self.m_label_link_ctrl.GetValue()
-        self.m_link.m_color = self.m_color_link_ctrl.GetColour()
+        self.m_link.m_color = self.m_color_link_ctrl.GetColour().GetAsString(wx.C2S_HTML_SYNTAX)
         event.Skip()

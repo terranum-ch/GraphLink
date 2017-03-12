@@ -21,3 +21,12 @@ def test_gk_graphic_simple():
     assert graph.add_link(myl1) is True
     assert graph.render("test_graphic_result") is True
 
+
+def test_gk_graphic_image():
+    node1 = GKNode("Node1", shape=GK_SHAPE_TYPE[2])
+    node2 = GKNode("Node2")
+    myl1 = GKLink(node1, node2)
+
+    graph = GKGraphic()
+    assert graph.add_link(myl1) is True
+    assert graph.render("test_graphic_result", extension="png", size=500) is True

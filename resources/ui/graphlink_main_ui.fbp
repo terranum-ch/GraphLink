@@ -1038,6 +1038,26 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
+                <object class="wxMenu" expanded="1">
+                    <property name="label">Graphic</property>
+                    <property name="name">m_menu_graph</property>
+                    <property name="permission">protected</property>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Generate</property>
+                        <property name="name">m_menu_graph_generate</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">OnGraphGenerate</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                </object>
             </object>
             <object class="wxToolBar" expanded="1">
                 <property name="BottomDockable">1</property>
