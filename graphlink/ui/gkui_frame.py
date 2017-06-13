@@ -112,12 +112,10 @@ class GKUIFrame (wx.Frame):
 
         # Connect Events
         # Menu event
-        self.Bind(wx.EVT_MENU, self.OnNodeSetPath, id=self.m_menu_node_path.GetId())
         self.Bind(wx.EVT_MENU, self.OnNodeAdd, id=self.m_menu_node_add.GetId())
         self.Bind(wx.EVT_MENU, self.OnNodeEdit, id=self.m_menu_node_edit.GetId())
         self.Bind(wx.EVT_MENU, self.OnLinkAdd, id=self.m_menu_link_add.GetId())
         self.Bind(wx.EVT_MENU, self.OnGraphGenerate, id=self.m_menu_graph_generate.GetId())
-        self.Bind(wx.EVT_CLOSE, self.Close, id=self.GetId())
 
         # node list event
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnNodeEdit, id=self.m_list_node_ctrl.GetId())
@@ -126,16 +124,37 @@ class GKUIFrame (wx.Frame):
         self.Bind(wx.EVT_UPDATE_UI, self.OnNoNodeSelected, id=self.m_menu_node_edit.GetId())
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateStatusBar, id=self.m_statusBar.GetId())
 
+        # destroy event
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
+
+    def OnDestroy(self, event):
+        """Unit the AUI Manager, otherwise It will crash
+           This function is Always called when Windows is Destroyed"""
+        self.m_mgr.UnInit()
+        event.Skip()
+
     def _create_menubar(self):
         self.m_menubar = wx.MenuBar(0)
 
+        # file menu
+        self.m_menu_file = wx.Menu()
+        self.m_menu_file_new = wx.MenuItem(
+            self.m_menu_file, wx.ID_NEW,
+            u"New", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_file.Append(self.m_menu_file_new)
+        self.m_menu_file_open = wx.MenuItem(
+            self.m_menu_file, wx.ID_OPEN,
+            u"Open...", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_file.Append(self.m_menu_file_open)
+        self.m_menu_file.AppendSeparator()
+        self.m_menu_file_exit = wx.MenuItem(
+            self.m_menu_file, wx.ID_EXIT,
+            u"Exit...", wx.EmptyString, wx.ITEM_NORMAL)
+        self.m_menu_file.Append(self.m_menu_file_exit)
+        self.m_menubar.Append(self.m_menu_file, u"File")
+
         # node menu
         self.m_menu_nodes = wx.Menu()
-        self.m_menu_node_path = wx.MenuItem(
-            self.m_menu_nodes, wx.ID_ANY,
-            u"Set path...", wx.EmptyString, wx.ITEM_NORMAL)
-        self.m_menu_nodes.Append(self.m_menu_node_path)
-        self.m_menu_nodes.AppendSeparator()
         self.m_menu_node_add = wx.MenuItem(
             self.m_menu_nodes, wx.ID_ANY,
             u"Add...", wx.EmptyString, wx.ITEM_NORMAL)
@@ -193,21 +212,34 @@ class GKUIFrame (wx.Frame):
 
         self.m_toolBar = self.CreateToolBar(style)
         self.m_toolBar.SetToolBitmapSize(wx.Size(32, 32))
-        self.m_tool_node_import = self.m_toolBar.AddTool(
-            self.m_menu_node_path.GetId(),
-            u"Import nodes",
-            wx.Bitmap(resource_path("node_import.png")),
+        self.m_tool_file_open = self.m_toolBar.AddTool(
+            self.m_menu_file_open.GetId(),
+            u"Open...",
+            wx.Bitmap(resource_path("file_open.png")),
             wx.NullBitmap,
             wx.ITEM_NORMAL,
-            u"Import nodes",
+            u"Open...",
+            wx.EmptyString,
+            None)
+        self.m_tool_node_add = self.m_toolBar.AddTool(
+            self.m_menu_node_add.GetId(),
+            u"Add node...",
+            wx.Bitmap(resource_path("node.png")),
+            wx.NullBitmap,
+            wx.ITEM_NORMAL,
+            u"Add node...",
+            wx.EmptyString,
+            None)
+        self.m_tool_link_add = self.m_toolBar.AddTool(
+            self.m_menu_link_add.GetId(),
+            u"Add link...",
+            wx.Bitmap(resource_path("link.png")),
+            wx.NullBitmap,
+            wx.ITEM_NORMAL,
+            u"Add link...",
             wx.EmptyString,
             None)
         self.m_toolBar.Realize()
-
-    def Close(self, force=False):
-        """uninit the aui manager"""
-        self.m_mgr.UnInit()
-        self.Destroy()
 
     def OnNodeSetPath(self, event):
         wx.LogMessage("Node import")
