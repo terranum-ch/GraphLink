@@ -196,7 +196,7 @@ class GKUIFrame (wx.Frame):
         # graphic menu
         self.m_menu_graph = wx.Menu()
         self.m_menu_graph_generate = wx.MenuItem(
-            self.m_menu_graph, wx.ID_ANY, u"Generate",
+            self.m_menu_graph, wx.ID_ANY, u"Refresh",
             wx.EmptyString, wx.ITEM_NORMAL)
         self.m_menu_graph.Append(self.m_menu_graph_generate)
 
@@ -237,6 +237,15 @@ class GKUIFrame (wx.Frame):
             wx.NullBitmap,
             wx.ITEM_NORMAL,
             u"Add link...",
+            wx.EmptyString,
+            None)
+        self.m_tool_graph_reload = self.m_toolBar.AddTool(
+            self.m_menu_graph_generate.GetId(),
+            u"Refresh...",
+            wx.Bitmap(resource_path("graph_reload.png")),
+            wx.NullBitmap,
+            wx.ITEM_NORMAL,
+            u"Refresh...",
             wx.EmptyString,
             None)
         self.m_toolBar.Realize()
