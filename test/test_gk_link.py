@@ -1,12 +1,10 @@
 #!/urs/bin/python
 
 import os
-import sys
-import pytest
 import graphviz
 
-curdir = os.path.dirname(__file__)
-sys.path.append(os.path.join(curdir, ".."))
+from .context import graphlink
+from .context import OUTPUT_TEST_PATH
 
 from graphlink.core.gk_link import GKLink
 from graphlink.core.gk_node import GKNode
@@ -37,7 +35,6 @@ def test_gk_link_simple():
     myl1.create_link(dot)
     myl2.create_link(dot)
     myl3.create_link(dot)
-    dot.render(filename="test_link1.gv")
 
-
-
+    dot.render(filename=os.path.join(OUTPUT_TEST_PATH, "test_link1.gv"))
+    assert os.path.exists(os.path.join(OUTPUT_TEST_PATH, "test_link1.gv"))

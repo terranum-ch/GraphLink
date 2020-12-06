@@ -1,13 +1,11 @@
 #!/urs/bin/python
 
 import os
-import sys
 import pytest
 import graphviz
 
-curdir = os.path.dirname(__file__)
-sys.path.append(os.path.join(curdir, ".."))
-print(os.path.join(curdir, "../graphlink"))
+from .context import graphlink
+from .context import OUTPUT_TEST_PATH
 
 from graphlink.core.gk_node import GKNode
 from graphlink.core.gk_node import GK_SHAPE_TYPE
@@ -24,7 +22,8 @@ def test_graphviz():
     dot.node("B")
     dot.node("C")
     dot.edges(['AB', 'BC'])
-    dot.render(filename="test_graph1.gv")
+    dot.render(filename=os.path.join(OUTPUT_TEST_PATH, "test_graph1.gv"))
+    assert os.path.exists(os.path.join(OUTPUT_TEST_PATH, "test_graph1.gv"))
 
 
 def test_gknode():
@@ -35,7 +34,8 @@ def test_gknode():
     mym1.create_node(dot)
     mym2.create_node(dot)
     dot.edge('test1', 'test2')
-    dot.render(filename="test_graph2.gv")
+    dot.render(filename=os.path.join(OUTPUT_TEST_PATH, "test_graph2.gv"))
+    assert os.path.exists(os.path.join(OUTPUT_TEST_PATH, "test_graph2.gv"))
 
 
 def test_gknode_init():
@@ -80,11 +80,12 @@ def test_gknode_image(get_test_data_folder):
     dot.edge(mym3.m_name, mym4.m_name)
     dot.edge(mym4.m_name, mym2.m_name)
 
-    dot.render(filename="test_img1.gv")
+    dot.render(filename=os.path.join(OUTPUT_TEST_PATH, "test_img1.gv"))
+    assert os.path.exists(os.path.join(OUTPUT_TEST_PATH, "test_img1.gv"))
 
 
 def test_gknode_save():
-    testfile = "save_test_file.gkn"
+    testfile = os.path.join(OUTPUT_TEST_PATH, "save_test_file.gkn")
     os.remove(testfile) if os.path.exists(testfile) else None
 
     mym1 = GKNode("John", shape=GK_SHAPE_TYPE[2])
@@ -94,6 +95,6 @@ def test_gknode_save():
 def test_gknode_load():
     mym2 = GKNode()
     assert mym2.load_from_file("toto") is False
-    assert mym2.load_from_file("save_test_file.gkn") is True
+    assert mym2.load_from_file(os.path.join(OUTPUT_TEST_PATH, "save_test_file.gkn")) is True
     assert mym2.m_name == "John"
     assert mym2.m_shapetype == GK_SHAPE_TYPE[2]
