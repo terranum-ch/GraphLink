@@ -8,3 +8,4 @@ tags
 *.gkn
 test_graphic_result.png
 .idea
+env/
