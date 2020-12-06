@@ -3,7 +3,7 @@
 Requirements : 
  - Python3
  - wxWidgets
- - graphwiz
+ - graphviz
  - pytest
 
 ## Virtualenv
@@ -20,6 +20,14 @@ Install the required dependencies with pip
     pip install pytest, graphviz
     pip install -U --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython_Phoenix
 
+## Graphviz
+
+Install the graphviz binary:
+    - Linux : `sudo apt-get install graphviz`
+    - OSX : `brew install graphviz`
+    - Windows : `choco install graphviz`
+
+It's also possible to put all the binaries into the /lib/bin folder. If this folder exists, GraphLink will use it.
 
 ## Test
 

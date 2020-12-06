@@ -9,3 +9,4 @@ tags
 test_graphic_result.png
 .idea
 env/
+lib/bin
