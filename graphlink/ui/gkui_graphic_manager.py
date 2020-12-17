@@ -59,4 +59,3 @@ class GKUIGraphicManager(object):
         </body>
         </html>
         """.format(imgpath))
-
